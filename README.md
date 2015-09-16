@@ -1,4 +1,4 @@
-<img src="img/slide_right.png" style="width:25%;  border:none;" align="right" />
+<img src="img/slide_right.png" style="width:100px;  border:none;" align="right" width="110"/>
 # secure-rtc
 Simple pgp encrypted WebRTC data channels
 
