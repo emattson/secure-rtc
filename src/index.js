@@ -7,7 +7,6 @@ function Peer(options) {
 
 inherits(Peer, SimplePeer);
 
-alert('hi');
 
-exports = Peer;
+module.exports = Peer;
 

@@ -1,10 +1,10 @@
-describe('simple-rtc', function() {
-  it('should test', function() {
-    expect(true).to.be.equal(true);
+var Peer = require('../src/index');
+var SimplePeer = require('simple-peer');
 
-    var spy = sinon.spy();
-    spy(1, '1');
-    console.log(spy);
-    //debugger;
+describe('simple-rtc', function() {
+  it('should inherit properties from simple-peer', function() {
+    var peer = new Peer();
+    var simplePeer = new SimplePeer();
+    expect(peer).to.contain.all.keys(Object.keys(simplePeer))
   });
 });
