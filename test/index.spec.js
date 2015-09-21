@@ -16,6 +16,7 @@ describe('secure-rtc', function() {
     var peer;
     after(function() {
       //cleanup
+      peer.asp.canceler.cancel();
       peer = null;
     });
 
@@ -39,30 +40,32 @@ describe('secure-rtc', function() {
       }, 100);
     });
 
-    //it('should be able to import keys', function(done) {
-    //  var peer = new Peer();
-    //  debugger;
-    //  peer.importKey(utils.publicKey, function(km){
-    //    debugger;
-    //    expect(km).to.be.an.instanceof(kbpgp.KeyManager);
-    //    done();
-    //  });
-    //});
-    //
-    //it('should be able to export its public key', function(done) {
-    //  var peer = new Peer();
-    //  peer.exportKey(function(key) {
-    //    expect(key).to.match(/-----BEGIN PGP PUBLIC KEY BLOCK-----.+/);
-    //    done();
-    //  });
-    //});
+    it('should be able to import keys', function(done) {
+      peer = new Peer();
+      var imported = sinon.spy(peer.kbpgp.KeyManager, 'import_from_armored_pgp');
+      peer.importKey(utils.publicKey);
+      setTimeout(function() {
+        expect(imported.calledOnce).to.be.true;
+        done();
+      }, 100)
+    });
 
-    //it('should provide an asp', function(done) {
-    //  var peer2 = new Peer({ecc: true, asp: new kbpgp.ASP({progress_hook: new sinon.spy()})});
-    //  peer2.generateKeys('test123', function() {
-    //    done();
-    //  });
-    //});
+    it('should be able to export its public key', function(done) {
+      peer = new Peer();
+      var keyGen = sinon.spy(peer.mykeys, 'export_public');
+      peer.exportKey();
+      setTimeout(function() {
+        expect(keyGen.calledOnce).to.be.true;
+        done();
+      }, 100);
+    });
+
+    it('should provide an asp', function(done) {
+      var progressSpy = sinon.spy();
+      var peer2 = new Peer({ecc: true, asp: new kbpgp.ASP({progress_hook: progressSpy})});
+      peer2.generateKeys('test123');
+      //here
+    });
 
   });
 });
