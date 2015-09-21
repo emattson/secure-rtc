@@ -1,6 +1,6 @@
 {
   "rules": {
-    "camelcase": 2,
+    "camelcase": 1,
     "curly": 2,
     "brace-style": [2, "1tbs"],
     "quotes": [2, "single"],
