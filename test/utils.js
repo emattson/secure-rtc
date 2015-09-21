@@ -1,0 +1,27 @@
+var PUBLIC_KEY = [
+  '-----BEGIN PGP PUBLIC KEY BLOCK-----',
+  'Version: Keybase OpenPGP v2.0.46',
+  'Comment: https://keybase.io/crypto',
+  '',
+  'xm8EVf+taRMFK4EEACIDAwSkuKrPsDAaUuEG6b5g5sA9XgfOim4D6l2hJ6IWqjGh',
+  'PpNPxlU7TODBEyqMyNkdAcnlwRoWZRhzOZT4Ve06cJUbZWWsBxVgbnu8bhRIFYbh',
+  'odNme9sfMjuGj8+vkd6NzTfNB3Rlc3QxMjPClgQTEwoAHgUCVf+taQIbAQMLCQcD',
+  'FQoIAh4BAheAAxYCAQIZAQAKCRDowrdQlTyYvXfVAX40B9D7nwS6THMPAT4GmW3g',
+  'YmyETeqUiZOK4nnMZ3hYUzV2wO841gUb6P+rflFPIq0BgPMhiUKWBiGXyXdYeZAF',
+  '00vpzaUiwXbov82+EX8zDHlcGo34gJBDT8ILVf/HKst2hM5WBFX/rWkSCCqGSM49',
+  'AwEHAgMEGEUDIzshwo1sZGVl6v/Vbp4OxFqC9HXoVtMVAm0VgDHJYrVQc9xyDHPx',
+  'yCtyD8iaIu2JbZ9QXUOM/5Iu6oqrnQMBCgnChwQYEwoADwUCVf+taQUJDwmcAAIb',
+  'DAAKCRDowrdQlTyYvY6pAYDcEem1UYZzNAntlafIrGibXcENoHTbx/57FKrCk22r',
+  'H0Sauncn2RljCVeo2M+pd9QBf2yiLOlQO6ad2yIosTHnyaRKJ950T+Grzb6u0Y06',
+  'CbnsGxJUcCoItka8yPa2DJAgqs5SBFX/rWkTCCqGSM49AwEHAgMEjLg+mOtb0WXD',
+  'eAyg5TIKt8RkLcyKSJkZ7BpIBe6RWnLhBBMGbQjXTIHujDEnKP0yNurFnxJ2PsiA',
+  '1rX4ErNTbcLAJwQYEwoADwUCVf+taQUJDwmcAAIbIgBqCRDowrdQlTyYvV8gBBkT',
+  'CgAGBQJV/61pAAoJECtCihu1Xj4lFBoBAJYTxlc1iZtX2mjuoWpOtknqCQJILCap',
+  'jZVXznleg6GgAP0VyP5HgtOyH+tJQYZZi/BLzygk+46dHo8UgXSwcOv7T0anAYCS',
+  'geChQ9SKqA0ZykqWBlIKMP8DouNk/RMKJgv51YoMlSmTkBj43AANlQQ+lfpcWLUB',
+  'fi8ry3zEGEV9r5jls2jcPqTYvBLK9DZKdxq9jCa78kmc6FKw7WwY75ERVdphimXI',
+  'sQ==',
+  '=75Xa',
+  '-----END PGP PUBLIC KEY BLOCK-----'
+];
+module.exports.publicKey = PUBLIC_KEY.join('\n');
