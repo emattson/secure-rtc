@@ -25,7 +25,7 @@ describe('secure-rtc', function () {
     it('should initiate a signal and pass a public key', function (done) {
       var p1 = new Peer({initiator: true});
       p1.on('signal', function (data) {
-        //expect(data).to.have.key('foo');
+        expect(data).to.have.any.keys(['publicKey']);
         done();
       });
     });
@@ -79,7 +79,7 @@ describe('secure-rtc', function () {
       }, 2000);
     });
 
-    it('should provide an asp'); //TODO: works, but write a working test
+    //it('should provide an asp'); //TODO: works, but write a working test
 
     it('should export kbpgp', function () {
       var peer = new Peer();

@@ -23,82 +23,90 @@ function Peer(options) {
   //hack a way to pass back so I can spy on it
   this.kbpgp = kbpgp;
 
-  var emitter = this.emit;
-
-  function intercept(event) {
+  this.emitter = this.emit;
+  this.emit = function (type) {
     var args = [].slice.call(arguments, 1);
-    switch (event) {
+    //console.log(arguments);
+    switch (type) {
       case 'signal':
-        args[0].foo = 'bar';
-        emitter('signal', args);
-        break;
+        args[0].publicKey = 'pubKey';// this.exportKey();
+        return this.emitter('signal', args[0]);
       default:
-        emitter(event, args);
+          switch(args.length){
+            case 0:
+              return this.emitter(type);
+            case 1:
+              return this.emitter(type, args[0]);
+            case 2:
+              return this.emitter(type, args[0], args[1]);
+            case 3:
+              return this.emitter(type, args[0], args[1], args[2]);
+            default:
+              throw new Error('too many emitter args');
+          }
     }
-  }
-  this.emit = intercept;
+  };
+  //debugger;
 
 }
 inherits(Peer, SimplePeer);
 
 Peer.WEBRTC_SUPPORT = SimplePeer.WEBRTC_SUPPORT;
 
-Peer.prototype.generateKeys = function (id) {
-  var params = {
-    asp: this.asp,
-    userid: id
-  };
-  if (this.ecc) {
-    kbpgp.KeyManager.generate_ecc(params, function (err, km) {
-      if (err != null) {
-        console.log('Problem generating ecc: ', err);
-      } else {
-        km.sign({}, function (err) {
-          if (!err) {
-            this.ring.add_key_manager(km);
-            this.mykeys = km;
-
-          }
-        }.bind(this));
-      }
-    }.bind(this));
+Peer.prototype._keygen = function (err, km) {
+  if (err != null) {
+    console.log('Problem generating keys: ', err);
   } else {
-    kbpgp.KeyManager.generate_rsa(params, function (err, km) {
-      if (err != null) {
-        console.log('Problem generating rsa: ', err);
-      } else {
-        km.sign({}, function (err) {
-          if (err != null) {
-            this.ring.add_key_manager(km);
-            this.mykeys = km;
-          }
-        }.bind(this));
+    km.sign({}, function (err) {
+      if (!err) {
+        this.ring.add_key_manager(km);
+        this.mykeys = km;
+        //this.exportKey(km);
       }
     }.bind(this));
   }
 };
 
-Peer.prototype.importKey = function (key) {
-  kbpgp.KeyManager.import_from_armored_pgp({armored: key, asp: this.asp}, function (err, km) {
-    if (err) {
-      console.log('Problem importing:', err);
-    } else {
-      this.ring.add_key_manager(km);
-    }
-  }.bind(this));
+Peer.prototype._keyimport = function (err, km) {
+  if (err) {
+    console.log('Problem importing:', err);
+  } else {
+    this.ring.add_key_manager(km);
+  }
 };
 
-Peer.prototype.exportKey = function () {
+Peer.prototype._keyexport = function (err, key) {
+  if (err) {
+    console.log('Problem exporting:', err);
+  } else {
+    this.publicKey = key;
+  }
+};
+
+Peer.prototype.generateKeys = function (id, cb) {
+  var params = {
+    asp: this.asp,
+    userid: id
+  };
+  cb = cb !== undefined ? cb : this._keygen;
+  if (this.ecc) {
+    kbpgp.KeyManager.generate_ecc(params, cb.bind(this));
+  } else {
+    kbpgp.KeyManager.generate_rsa(params, cb.bind(this));
+  }
+};
+
+Peer.prototype.importKey = function (key, cb) {
+  cb = cb !== undefined ? cb : this._keyimport;
+  kbpgp.KeyManager.import_from_armored_pgp({armored: key, asp: this.asp}, cb.bind(this));
+};
+
+Peer.prototype.exportKey = function (cb) {
+  cb = cb !== undefined ? cb : this._keyexport;
   if (this.publicKey) {
     return this.publicKey;
   } else {
-    this.mykeys.export_public({}, function (err, key) {
-      if (err) {
-        console.log('Problem exporting:', err);
-      } else {
-        this.publicKey = key;
-      }
-    }.bind(this));
+    this.mykeys.export_public({}, cb.bind(this));
   }
 };
 
