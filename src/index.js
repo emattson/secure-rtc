@@ -15,15 +15,33 @@ function Peer(options) {
   this.mykeys;
 
   this.asp = options.asp !== undefined ? options.asp : new kbpgp.ASP({
-    progress_hook: function(o) {
+    progress_hook: function (o) {
       console.log(o);
     }
   });
 
   //hack a way to pass back so I can spy on it
   this.kbpgp = kbpgp;
+
+  var emitter = this.emit;
+
+  function intercept(event) {
+    var args = [].slice.call(arguments, 1);
+    switch (event) {
+      case 'signal':
+        args[0].foo = 'bar';
+        emitter('signal', args);
+        break;
+      default:
+        emitter(event, args);
+    }
+  }
+  this.emit = intercept;
+
 }
 inherits(Peer, SimplePeer);
+
+Peer.WEBRTC_SUPPORT = SimplePeer.WEBRTC_SUPPORT;
 
 Peer.prototype.generateKeys = function (id) {
   var params = {
@@ -37,8 +55,8 @@ Peer.prototype.generateKeys = function (id) {
       } else {
         km.sign({}, function (err) {
           if (!err) {
-              this.ring.add_key_manager(km);
-              this.mykeys = km;
+            this.ring.add_key_manager(km);
+            this.mykeys = km;
 
           }
         }.bind(this));
@@ -51,8 +69,8 @@ Peer.prototype.generateKeys = function (id) {
       } else {
         km.sign({}, function (err) {
           if (err != null) {
-              this.ring.add_key_manager(km);
-              this.mykeys = km;
+            this.ring.add_key_manager(km);
+            this.mykeys = km;
           }
         }.bind(this));
       }
@@ -71,7 +89,7 @@ Peer.prototype.importKey = function (key) {
 };
 
 Peer.prototype.exportKey = function () {
-  if (this.publicKey){
+  if (this.publicKey) {
     return this.publicKey;
   } else {
     this.mykeys.export_public({}, function (err, key) {
@@ -83,7 +101,6 @@ Peer.prototype.exportKey = function () {
     }.bind(this));
   }
 };
-
 
 
 module.exports = Peer;
