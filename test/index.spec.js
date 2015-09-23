@@ -19,7 +19,7 @@ describe('secure-rtc', function() {
     });
   });
 
-  describe('pgp keys', function() {
+  describe('pgp key generation and exporting', function() {
     it('should generate an ecc PGP key pair', function(done) {
       var peer = new Peer();
       var ecc = sinon.spy(peer.kbpgp.KeyManager, 'generate_ecc');
@@ -66,5 +66,12 @@ describe('secure-rtc', function() {
     });
 
     it('should provide an asp'); //TODO: works, but write a working test
+
+    it('should export kbpgp', function() {
+      var peer = new Peer();
+      expect(peer).to.have.ownProperty('kbpgp');
+    })
   });
+
+  describe('')
 });
